@@ -124,10 +124,27 @@ const updateBook = async (req: Request, res: Response, next: NextFunction) => {
 const getBooks = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const books = await bookModel.find();
-    return response.json(books);
+    return res.json(books);
   } catch (error) {
     return next(createHttpError(500, "Error while fetching books"));
   }
 };
 
-export { createBook, updateBook, getBooks };
+const fetchBook = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const bookId = req.params.bookId;
+    const book = await bookModel.findOne({ _id: bookId });
+    if (!book) {
+      return next(createHttpError(404, "Book not Found"));
+    }
+    return res.json(book);
+  } catch (error) {
+    if (error instanceof Error) {
+      return next(createHttpError(500, error.message)); // Access error.message safely
+    } else {
+      return next(createHttpError(500, "Unknown error occurred")); // Fallback for unknown error types
+    }
+  }
+};
+
+export { createBook, updateBook, getBooks, fetchBook };
