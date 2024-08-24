@@ -13,7 +13,6 @@ const authenticate = (req: Request, res: Response, next: NextFunction) => {
   }
   try {
     const parsedToken = token.split(" ")[1];
-    console.log("parsed", parsedToken);
 
     const decoded = verify(parsedToken, config.jwtSecret as string);
     const _req = req as AuthRequest;

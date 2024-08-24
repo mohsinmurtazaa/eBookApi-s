@@ -2,7 +2,13 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import authenticate from "../middlewares/authenticate";
-import { createBook, fetchBook, getBooks, updateBook } from "./bookController";
+import {
+  createBook,
+  deleteBook,
+  fetchBook,
+  listBooks,
+  updateBook,
+} from "./bookController";
 const bookRouter = express.Router();
 
 const upload = multer({
@@ -42,8 +48,9 @@ bookRouter.patch(
   updateBook
 );
 
-bookRouter.get("/", getBooks);
+bookRouter.get("/", listBooks);
 
 bookRouter.get("/:bookId", fetchBook);
+bookRouter.delete("/:bookId", authenticate, deleteBook);
 
 export default bookRouter;
